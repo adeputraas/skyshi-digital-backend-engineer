@@ -1,22 +1,17 @@
 const sql = require("./db.js");
-const uuid = require('uuid')
 
 // constructor
-const Participants = function(tutorial) {
-  this.id = tutorial.id || uuid.v4();
-  this.name = tutorial.name;
-  this.email = tutorial.email;
-  this.x = tutorial.valueX;
-  this.y = tutorial.valueY;
-  this.z = tutorial.valueZ;
-  this.w = tutorial.valueW;
+const Todos = function(todo) {
+  this.id = todo.id ;
+  this.activity_group_id = todo.activity_group_id;
+  this.title = todo.title;
 };
 
-Participants.create = async (newParticipants) => {
+Todos.create = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `INSERT INTO participant SET ?`, newParticipants
+                /* sql */ `INSERT INTO todo (activity_group_id, title) VALUES (?, ?)`, [newTodos.activity_group_id, newTodos.title]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -31,11 +26,11 @@ Participants.create = async (newParticipants) => {
     }
 };
 
-Participants.getAll = async () => {
+Todos.getAll = async () => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM participant`, []
+                /* sql */ `SELECT * FROM todo`, []
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -50,11 +45,11 @@ Participants.getAll = async () => {
     }
 };
 
-Participants.findOne = async (newParticipants) => {
+Todos.getTodoByIdActivity = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM participant WHERE id =?`, [newParticipants.id]
+                /* sql */ `SELECT * FROM todo WHERE activity_group_id = ?`, [newTodos.activity_group_id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -69,12 +64,11 @@ Participants.findOne = async (newParticipants) => {
     }
 };
 
-Participants.updateOne = async (newParticipants) => {
+Todos.findOne = async (newTodos) => {
     try {
-        const dto = [newParticipants.name, newParticipants.email, newParticipants.x, newParticipants.y, newParticipants.z, newParticipants.w, newParticipants.id]
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `UPDATE participant SET name=?, email=?, x=?, y=?, z=?, w=? WHERE id=?`, dto
+                /* sql */ `SELECT * FROM todo WHERE id =?`, [newTodos.id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -89,11 +83,31 @@ Participants.updateOne = async (newParticipants) => {
     }
 };
 
-Participants.deleteOne = async (newParticipants) => {
+Todos.updateOne = async (newTodos) => {
+    try {
+        const dto = [newTodos.title, newTodos.id];
+        const results = await new Promise((resolve, reject) => {
+            sql.query(
+                /* sql */ `UPDATE todo SET title=? WHERE id=?`, dto
+                ,
+                (err, res) => {
+                    if (err) reject(err);
+                    resolve(res);
+                }
+            );
+        })
+            .then((response) => response)
+        return results;
+    } catch (error) {
+        throw error;
+    }
+};
+
+Todos.deleteOne = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `DELETE FROM participant WHERE id=? `, [newParticipants.id]
+                /* sql */ `DELETE FROM todo WHERE id=? `, [newTodos.id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -109,4 +123,4 @@ Participants.deleteOne = async (newParticipants) => {
 };
 
 
-module.exports = Participants;
+module.exports = Todos;
