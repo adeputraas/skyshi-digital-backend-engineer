@@ -1,6 +1,6 @@
 exports.up = function(knex) {
     return knex.schema
-      .createTable('activity', function (table) {
+      .createTable('activities', function (table) {
         table.increments('id');
         table.string('title', 100).notNullable();
         table.string('email', 1000).notNullable();
@@ -22,7 +22,7 @@ exports.up = function(knex) {
   
   exports.down = function(knex) {
     return knex.schema
-        .dropTable("activity")
+        .dropTable("activities")
         .dropTable("todo");
   };
   

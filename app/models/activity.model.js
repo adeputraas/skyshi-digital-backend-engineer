@@ -11,7 +11,7 @@ Todos.create = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `INSERT INTO activity (email, title) VALUES (?, ?)`, [newTodos.email, newTodos.title]
+                /* sql */ `INSERT INTO activities (email, title) VALUES (?, ?)`, [newTodos.email, newTodos.title]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -30,7 +30,7 @@ Todos.getAll = async () => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM activity`, []
+                /* sql */ `SELECT * FROM activities`, []
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -49,7 +49,7 @@ Todos.findOne = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM activity WHERE id =?`, [newTodos.id]
+                /* sql */ `SELECT * FROM activities WHERE id =?`, [newTodos.id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -69,7 +69,7 @@ Todos.updateOne = async (newTodos) => {
         const dto = [newTodos.title, newTodos.id];
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `UPDATE activity SET title=? WHERE id=?`, dto
+                /* sql */ `UPDATE activities SET title=? WHERE id=?`, dto
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -88,7 +88,7 @@ Todos.deleteOne = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `DELETE FROM activity WHERE id=? `, [newTodos.id]
+                /* sql */ `DELETE FROM activities WHERE id=? `, [newTodos.id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
