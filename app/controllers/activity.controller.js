@@ -15,10 +15,10 @@ exports.create = async (req, res) => {
     // Retrieve Data
     const retrieveActivity = await Activity.findOne({id: response.insertId});
     
-    res.status(200).send({status: "Success", message: "Success", data: retrieveActivity.length ? retrieveActivity[0] : {}})
+    res.status(201).send({status: "Success", message: "Success", data: retrieveActivity.length ? retrieveActivity[0] : {}})
 
   } catch (error) {
-    res.status(200).send({status: "Bad Request",  message: error.message, data: {}})
+    res.status(400).send({status: "Bad Request",  message: error.message, data: {}})
   }
 };
 
@@ -29,7 +29,7 @@ exports.findAll = async (req, res) => {
       res.status(200).send({status: "Success", message: "Success", data : retrieveListParticipants});
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message})
+      res.status(400).send({status: "Bad Request",  message: error.message})
     }
   };
 
@@ -47,10 +47,10 @@ exports.findOne = async (req, res) => {
           throw { message: `Activity with ID ${participant.id} Not Found` }
         }
 
-        res.status(200).send({status: "Success", message: "Success", data : retrieveActivity});
+        res.status(200).send({status: "Success", message: "Success", data : retrieveActivity.length ? retrieveActivity[0]: {}});
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message, data: {}})
+      res.status(404).send({status: "Not Found",  message: error.message, data: {}})
     }
   };
 
@@ -62,7 +62,11 @@ exports.update = async (req, res) => {
 
         // Create a Participant
         const participant = new Activity(retrieveValidRequest);
-        await Activity.updateOne(participant);
+        const response = await Activity.updateOne(participant);
+
+        if(!response.affectedRows) {
+          throw { message: `Activity with ID ${participant.id} Not Found` }
+        }
 
         // Retrieve Data
         const retrieveActivity = await Activity.findOne({id: participant.id});
@@ -70,7 +74,7 @@ exports.update = async (req, res) => {
         res.status(200).send({status: "Success", message: "Success", data: retrieveActivity.length ? retrieveActivity[0] : {}})
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message, data: {}})
+      res.status(404).send({status: "Not Found",  message: error.message, data: {}})
     }
   };
 
@@ -90,6 +94,6 @@ exports.update = async (req, res) => {
         res.status(200).send({status: "Success", message: "Success", data: {}});
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message, data: {}})
+      res.status(404).send({status: "Not Found",  message: error.message, data: {}})
     }
   };

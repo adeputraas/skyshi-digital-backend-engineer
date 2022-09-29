@@ -45,25 +45,6 @@ Todos.getAll = async () => {
     }
 };
 
-Todos.getTodoByIdActivity = async (newTodos) => {
-    try {
-        const results = await new Promise((resolve, reject) => {
-            sql.query(
-                /* sql */ `SELECT * FROM todo WHERE activity_group_id = ?`, [newTodos.activity_group_id]
-                ,
-                (err, res) => {
-                    if (err) reject(err);
-                    resolve(res);
-                }
-            );
-        })
-            .then((response) => response)
-        return results;
-    } catch (error) {
-        throw error;
-    }
-};
-
 Todos.findOne = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
@@ -88,7 +69,7 @@ Todos.updateOne = async (newTodos) => {
         const dto = [newTodos.title, newTodos.id];
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `UPDATE todo SET title=? WHERE id=?`, dto
+                /* sql */ `UPDATE activity SET title=? WHERE id=?`, dto
                 ,
                 (err, res) => {
                     if (err) reject(err);

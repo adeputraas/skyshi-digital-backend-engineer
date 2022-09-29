@@ -1,7 +1,7 @@
 module.exports = {
-  HOST: "localhost",
+  HOST: "host.docker.internal",
   PORT: "3306",
   USER: "root",
   PASSWORD: "root",
-  DB: "skyshi"
+  DB: "todo4"
 };

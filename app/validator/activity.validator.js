@@ -35,7 +35,7 @@ exports.updateByActivityGroupId = async (newParticipants) => {
 exports.readById = async (newParticipants) => {
 
     const schema = Joi.object({
-        id: Joi.number().required()
+        id: Joi.string()
     }).required();
 
     try {

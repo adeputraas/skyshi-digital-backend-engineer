@@ -10,11 +10,17 @@ exports.create = async (req, res) => {
     const participant = new Todos(retrieveValidRequest);
 
     // Insert Database
-    await Todos.create(participant);
-    res.status(200).send({status: "Success", message: "Success"})
+    const response = await Todos.create(participant);
+    const retrieveListParticipants = await Todos.findOne({id: response.insertId});
+
+    if(retrieveListParticipants.length > 0) {
+      retrieveListParticipants[0].is_active = retrieveListParticipants[0].is_active ? true : false; 
+    }
+
+    res.status(201).send({status: "Success", message: "Success", data: retrieveListParticipants.length ? retrieveListParticipants[0] : {}});
 
   } catch (error) {
-    res.status(200).send({status: "Bad Request",  message: error.message})
+    res.status(400).send({status: "Bad Request",  message: error.message})
   }
 };
 
@@ -51,10 +57,16 @@ exports.findOne = async (req, res) => {
         const participant = new Todos(retrieveValidRequest);
         let retrieveListParticipants = await Todos.findOne(participant);
 
-        res.status(200).send({status: "Success", message: "Success", data : retrieveListParticipants});
+        if(retrieveListParticipants.length === 0) {
+          throw { message: `Todo with ID ${participant.id} Not Found` }
+        }else{
+          retrieveListParticipants[0].is_active = retrieveListParticipants[0].is_active ? true : false; 
+        }
+
+        res.status(200).send({status: "Success", message: "Success", data : retrieveListParticipants.length ? retrieveListParticipants[0] : {}});
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message})
+      res.status(404).send({status: "Not Found",  message: error.message})
     }
   };
 
@@ -66,12 +78,21 @@ exports.update = async (req, res) => {
 
         // Create a Participant
         const participant = new Todos(retrieveValidRequest);
-        await Todos.updateOne(participant);
+        const response = await Todos.updateOne(participant);
+        if(!response.affectedRows) {
+          throw { message: `Todo with ID ${participant.id} Not Found` }
+        }
 
-        res.status(200).send({status: "Success", message: "Success"});
+        const retrieveListParticipants = await Todos.findOne({id: retrieveValidRequest.id});
+
+        if(retrieveListParticipants.length > 0) {
+          retrieveListParticipants[0].is_active = retrieveListParticipants[0].is_active ? true : false; 
+        }
+
+        res.status(200).send({status: "Success", message: "Success", data: retrieveListParticipants.length ? retrieveListParticipants[0] : {}});
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message})
+      res.status(404).send({status: "Not Found",  message: error.message})
     }
   };
 
@@ -82,11 +103,14 @@ exports.update = async (req, res) => {
 
         // Create a Participant
         const participant = new Todos(retrieveValidRequest);
-        await Todos.deleteOne(participant);
+        const response = await Todos.deleteOne(participant);
+        if(!response.affectedRows) {
+          throw { message: `Todo with ID ${participant.id} Not Found` }
+        }
 
-        res.status(200).send({status: "Success", message: "Success"});
+        res.status(200).send({status: "Success", message: "Success", data: {}});
   
     } catch (error) {
-      res.status(200).send({status: "Bad Request",  message: error.message})
+      res.status(404).send({status: "Not Found",  message: error.message})
     }
   };
