@@ -8,7 +8,7 @@ exports.up = function(knex) {
         table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable();
         table.timestamp('deleted_at').defaultTo(knex.fn.now());
       })
-      .createTable('todo', function (table) {
+      .createTable('todos', function (table) {
           table.increments('id');
           table.integer('activity_group_id').notNullable();
           table.string('title', 100).notNullable();
@@ -23,7 +23,7 @@ exports.up = function(knex) {
   exports.down = function(knex) {
     return knex.schema
         .dropTable("activities")
-        .dropTable("todo");
+        .dropTable("todos");
   };
   
   exports.config = { transaction: true };

@@ -12,7 +12,7 @@ Todos.create = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `INSERT INTO todo (activity_group_id, title) VALUES (?, ?)`, [newTodos.activity_group_id, newTodos.title]
+                /* sql */ `INSERT INTO todos (activity_group_id, title) VALUES (?, ?)`, [newTodos.activity_group_id, newTodos.title]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -31,7 +31,7 @@ Todos.getAll = async () => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM todo`, []
+                /* sql */ `SELECT * FROM todos`, []
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -50,7 +50,7 @@ Todos.getTodoByIdActivity = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM todo WHERE activity_group_id = ?`, [newTodos.activity_group_id]
+                /* sql */ `SELECT * FROM todos WHERE activity_group_id = ?`, [newss.activity_group_id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -69,7 +69,7 @@ Todos.findOne = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `SELECT * FROM todo WHERE id =?`, [newTodos.id]
+                /* sql */ `SELECT * FROM todos WHERE id =?`, [newTodos.id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
@@ -90,10 +90,10 @@ Todos.updateOne = async (newTodos) => {
         let query = ``;
         let dto = []
         if(newTodos.title) {
-            query = `UPDATE todo SET title=?, priority=? WHERE id=?`;
+            query = `UPDATE todos SET title=?, priority=? WHERE id=?`;
             dto = [newTodos.title, newTodos.priority || 'very-high', newTodos.id];
         }else {
-            query = `UPDATE todo SET priority=? WHERE id=?`;
+            query = `UPDATE todos SET priority=? WHERE id=?`;
             dto = [ newTodos.priority || 'very-high', newTodos.id];
         }
         const results = await new Promise((resolve, reject) => {
@@ -117,7 +117,7 @@ Todos.deleteOne = async (newTodos) => {
     try {
         const results = await new Promise((resolve, reject) => {
             sql.query(
-                /* sql */ `DELETE FROM todo WHERE id=? `, [newTodos.id]
+                /* sql */ `DELETE FROM todos WHERE id=? `, [newTodos.id]
                 ,
                 (err, res) => {
                     if (err) reject(err);
