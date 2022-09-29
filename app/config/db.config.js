@@ -1,7 +1,8 @@
+require('dotenv').config();
 module.exports = {
-  HOST: "host.docker.internal",
-  PORT: "3306",
-  USER: "root",
-  PASSWORD: "root",
-  DB: "todo4"
+  HOST: process.env.MYSQL_HOST || "host.docker.internal",
+  PORT: process.env.MYSQL_PORT || "3306",
+  USER: process.env.MYSQL_USER ||"root",
+  PASSWORD: process.env.MYSQL_PASSWORD || "root",
+  DB: process.env.MYSQL_DBNAME || "todo4"
 };

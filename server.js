@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/todo.routes.js")(app);
 require("./app/routes/activity.routes.js")(app);
-
+require('./app/models/setup').runMigrations();
 // set port, listen for requests
 const PORT = process.env.PORT || 3030;
 app.listen(PORT, () => {
